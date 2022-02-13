@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="selectGenre">
+	
+		SELECT
+			   G.GENRE
+		  FROM GENRE G
+		 WHERE GENRE_NO = ?
+		
+	
+	</entry>
+	<entry key="selectMovieCode">
+	
+		SELECT
+			   M.MOVIE_CODE
+		  FROM MOVIE M
+		 WHERE TITLE = ?
+		 
+	</entry>
+	<entry key="selectGenreNo">
+		
+		SELECT
+			   G.GENRE_NO
+		  FROM GENRE G
+		 WHERE GENRE = ?
+	
+	</entry>
+	
+	<entry key="insertMovieTable">
+		INSERT
+		  INTO MOVIE M
+		  (
+		    M.MOVIE_CODE
+		  , M.TITLE
+		  , M.GENRE_NO
+		  
+		  )
+		  VALUES
+		  (
+		    SEQ_MOVIE_CODE.NEXTVAL
+		  , ?
+		  , ?
+		  
+		  )
+	
+	
+	</entry>
+	<entry key="insertMovie">
+		Insert
+		  INTO MOVIE_DETAIL MD
+		  (
+		    MD.MOVIE_CODE
+		  , MD.NATION  
+		  , MD.DIRECTOR
+		  , MD.RUNNING_TIME
+		  , MD.RELEASE_DATE
+		  , MD.LEAD_ACTOR
+		  , MD.SYNOPSIS
+		  )
+		  VALUES
+		  (
+		    ?
+		  , ?
+		  , ?
+		  , ?
+		  , ?
+		  , ?
+		  , ?
+		  )
+	</entry>
+	<entry key="searchTitle">
+		SELECT
+               MD.MOVIE_CODE
+             , M.TITLE
+             , G.GENRE
+             , M.AVG_RATING
+             , MD.NATION
+             , MD.DIRECTOR
+             , MD.RUNNING_TIME
+             , MD.RELEASE_DATE
+             , MD.LEAD_ACTOR
+             , MD.SYNOPSIS
+          FROM MOVIE_DETAIL MD
+          JOIN MOVIE M ON(M.MOVIE_CODE=MD.MOVIE_CODE)
+          JOIN GENRE G ON(M.GENRE_NO=G.GENRE_NO)
+         WHERE M.TITLE = ?
+		  
+	</entry>
+	<entry key="searchGenre">
+		SELECT
+			   MD.MOVIE_CODE
+			 , M.TITLE
+			 , G.GENRE
+			 , M.AVG_RATING
+			 , MD.NATION
+			 , MD.DIRECTOR
+			 , MD.RUNNING_TIME
+			 , MD.RELEASE_DATE
+			 , MD.LEAD_ACTOR
+			 , MD.SYNOPSIS
+		  FROM MOVIE_DETAIL MD
+		  JOIN MOVIE M ON(M.MOVIE_CODE=MD.MOVIE_CODE)
+		  JOIN GENRE G ON(M.GENRE_NO=G.GENRE_NO)
+		 WHERE G.GENRE = ?
+		  
+	</entry>
+	<entry key="searchRating">
+		SELECT
+			   MD.MOVIE_CODE
+			 , M.TITLE
+			 , G.GENRE
+			 , M.AVG_RATING
+			 , MD.NATION
+			 , MD.DIRECTOR
+			 , MD.RUNNING_TIME
+			 , MD.RELEASE_DATE
+			 , MD.LEAD_ACTOR
+			 , MD.SYNOPSIS
+		  FROM MOVIE_DETAIL MD
+		  JOIN MOVIE M ON(MD.MOVIE_CODE=M.MOVIE_CODE)
+		  JOIN GENRE G ON(M.GENRE_NO=G.GENRE_NO)
+		 WHERE M.AVG_RATING>= ?
+		  
+	</entry>
+	
+	<entry key="searchReview">
+		
+		SELECT
+			   R.REVIEW_CODE
+			 , R.MOVIE_CODE
+			 , M.TITLE
+			 , R.REVIEW
+			 , R.RATING
+		  FROM REVIEW R
+		  JOIN MOVIE M ON(R.MOVIE_CODE=M.MOVIE_CODE)
+		 WHERE M.TITLE = ?
+	
+	</entry>
+	<entry key = "uploadReview">
+		INSERT
+		  INTO REVIEW R
+		(
+			R.MOVIE_CODE,
+			R.REVIEW_CODE,
+			R.REVIEW,
+			R.RATING
+		)	
+		VALUES
+		(
+			?,
+			SEQ_REVIEW_CODE.NEXTVAL,
+			?,
+			?			
+		)
+	</entry>
+	
+	<entry key = "selectAllMovie">
+		SELECT
+			*
+		  FROM MOVIE
+	</entry>
+
+	<entry key = "recommendedMovie">
+		SELECT 
+                G.GENRE
+                , M.TITLE
+                , MAX(R.RATING)
+          FROM REVIEW R
+          JOIN MOVIE M ON(R.MOVIE_CODE = M.MOVIE_CODE)
+          JOIN GENRE G ON(M.GENRE_NO = G.GENRE_NO)
+          GROUP BY G.GENRE, M.TITLE
+	</entry>
+</properties>
